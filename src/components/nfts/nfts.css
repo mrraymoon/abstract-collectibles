@@ -1,0 +1,71 @@
+.nfts * {
+  /* border: solid 1px red;   */  
+}
+
+.nfts {
+  padding: 25px;
+}
+
+.nfts-container_cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 16px;
+  min-height: 80vh;
+}
+
+.nfts-container_text {
+  padding-left: 50px;  
+}
+
+.nfts-container_text h1 {
+  font-family: 'Titan One', cursive;
+  font-size: 40px;
+  color: white;
+}
+
+.nft-card {
+  height: 450px;
+  width: 350px;
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  border: 1px solid rgba(145, 27, 27, 0.538);
+  border-radius: 4px;
+}
+
+.nft-card a {
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+
+.nft-card_top {
+  height: 80%;
+  width: 100%;
+}
+
+.nft-card_top img {
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.nft-card_bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 20%;
+}
+
+.nft-card_bottom .card-title {
+  font-size: 25px;
+  color: white;
+  font-family: 'Fascinate', cursive;
+}
+
+.nft-card_bottom .card-price {
+  color: green;
+  font-weight: 700;
+}

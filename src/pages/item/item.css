@@ -1,0 +1,91 @@
+.nft_details * {
+    /* border: solid 1px red; */
+}
+
+.nft_details {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+.nft_details-img, .nft_details-details {
+    width: 50%;
+}
+
+.nft_details-img img {
+    margin: 30px;    
+    margin-left: 90px;
+    width: 600px;
+    height: 650px;
+    border-radius: 10px;
+}
+
+.nft_details-details {
+    padding-top: 50px;
+}
+
+.nft_details-details .details-row {
+    padding: 15px 0;
+}
+
+.details-label {
+    font-size: 30px;     
+    font-weight: 700;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.details-content {
+    font-size: 1.3rem;
+    font-style: italic;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(154, 154, 154);
+}
+
+.details-bottom {
+    display: flex;
+    align-items: center;
+    margin-top: 60px;
+}
+
+.details-buy_btn {
+    border: 1px solid rgba(255, 0, 0, 0.452);
+    width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: purple;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    /* margin-top: 60px; */
+    cursor: pointer;
+}
+
+.details-gift_nft {
+    margin-left: 60px;
+    display: flex;
+}
+
+.details-gift_nft input {
+    padding: 7px 10px;
+    color: black;
+    border-radius: 5px;
+    border: 1px solid green;
+    outline: none;
+}
+
+.details-gift_nft span {
+    border: 1px solid rgba(255, 0, 0, 0.452);
+    width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: rgb(0, 128, 15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin-left: 5px;
+    cursor: pointer;
+}
