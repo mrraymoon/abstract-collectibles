@@ -15,15 +15,13 @@ const Main = () => {
   }, [nftContract]);
   const loadNFTs = async () => {
     try {
-      const data = await nftContract.methods.fetchAllTokenItems().call();
-      console.log("data -> " + data);
+      const data = await nftContract.methods.fetchAllTokenItems().call();      
       const items = await Promise.all(
         data.map(async (_token) => {
           const tokenUri = await nftContract.methods
             .tokenURI(_token.tokenId)
-            .call();
+            .call();            
           const meta = await axios.get(tokenUri);
-          console.log(JSON.stringify(meta, null, 4));
           let tokenPrice = ethers.utils.formatUnits(
             _token.tokenPrice.toString(),
             "ether"
@@ -34,7 +32,7 @@ const Main = () => {
             seller: _token.seller,
             name: meta.data.itemName,
             description: meta.data.itemDescription,
-            owner: _token.itemOwner,
+            owner: _token.owner,
             image: meta.data.itemImage,
           };
         })

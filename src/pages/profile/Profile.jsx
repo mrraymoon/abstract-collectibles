@@ -7,7 +7,6 @@ import axios from "axios";
 import { ethers } from "ethers";
 
 const Profile = () => {
-  const { address, connect, performActions } = useContractKit();
   const nftContract = useNftContract();
 
   const [nfts, setNfts] = useState([]);
@@ -15,34 +14,34 @@ const Profile = () => {
 
   useEffect(() => {
     if (nftContract) {
-      loadNFTs();
+      getNfts();
     }
   }, [nftContract]);
 
-  const loadNFTs = async () => {
+  const getNfts = async () => {
     setLoading(true);
     try {
-      const data = await nftContract.methods.fetchMyNFTs().call();
-      console.log({ data });
-      const items = await Promise.all(
-        data.map(async (i) => {
-          const tokenURI = await nftContract.methods.tokenURI(i.tokenId).call();
-          const owner = await nftContract.methods.getNftOwner(i.tokenId).call();
+      const data = await nftContract.methods.fetchMyTokens().call();
+      const tokens = await Promise.all(
+        data.map(async (_token) => {
+          const tokenURI = await nftContract.methods.tokenURI(_token).call();
+          let _price = await nftContract.methods.tokenItems(_token).call();
+          const owner = await nftContract.methods.ownerOf(_token).call();
           const meta = await axios.get(tokenURI);
-          let price = ethers.utils.formatUnits(i.price.toString(), "ether");
+          let tokenPrice = ethers.utils.formatUnits(_price.tokenPrice.toString(), "ether");
           return {
-            price,
-            tokenId: Number(i.tokenId),
-            seller: i.seller,
-            name: meta.data.name,
+            tokenId: Number(_token),
+            tokenPrice,
             owner,
-            image: meta.data.image,
-            tokenURI,
+            name: meta.data.itemName,
+            image: meta.data.itemImage,
+            description: meta.data.itemDescription,
           };
         })
       );
 
-      setNfts(items);
+      setNfts(tokens);
+      console.log(tokens)
     } catch (e) {
       console.log({ e });
     } finally {
@@ -52,11 +51,7 @@ const Profile = () => {
 
   return (
     <div className="profile">
-      <Nfts
-          nfts={nfts}
-          loading={loading}
-          title="Your NFTs"      
-        />
+      <Nfts nfts={nfts} loading={loading} title="Your NFTs" />
     </div>
   );
 };

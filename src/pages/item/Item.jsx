@@ -10,37 +10,37 @@ import "./item.css";
 
 const Item = () => {
   const { id } = useParams();
-  const nftContract = useMarketContract();
-  const [nftData, setNftData] = useState({});
+  const [tokenOwner, setTokenOwner] = useState();
+  const [beneficiary, setBeneficiary] = useState();
+  const nftContract = useNftContract();
+  const [nftDetails, setNftDetails] = useState({});
   const { address, performActions, kit } = useContractKit();
   const { defaultAccount } = kit;
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (nftContract) fetchNft();
+    if (nftContract) fetchNftData();
   }, [nftContract]);
 
-  const fetchNft = async () => {
+  const fetchNftData = async () => {
     const tokenUri = await nftContract.methods.tokenURI(id).call();
+    const _tokenOwner = await nftContract.methods.ownerOf(id).call();
     const meta = await axios.get(tokenUri);
-    setNftData(meta.data);
+    setNftDetails(meta.data);
+    setTokenOwner(_tokenOwner);
   };
 
   const purchaseNft = async () => {
     try {
       await performActions(async (kit) => {
         const { defaultAccount } = kit;
-        /* user will be prompted to pay the asking proces to complete the transaction */
         const price = ethers.utils
-          .parseUnits(nftData.price, "ether")
+          .parseUnits(nftDetails.itemPrice, "ether")
           .toString();
-        console.log({ price });
-        const transaction = await nftContract.methods
-          .createMarketSale(id)
-          .send({
-            from: defaultAccount,
-            value: price,
-          });
+        const transaction = await nftContract.methods.purchaseToken(id).send({
+          from: defaultAccount,
+          value: price,
+        });
         alert(`You have successfully purchased this NFT!`);
         navigate(`/profile`);
       });
@@ -49,30 +49,72 @@ const Item = () => {
     }
   };
 
+  const sellNft = async () => {
+    try {
+      await performActions(async (kit) => {
+        const _price = ethers.utils
+          .parseUnits(nftDetails.itemPrice, "ether")
+          .toString();
+        await nftContract.methods
+          .sellToken(id, _price)
+          .send({ from: defaultAccount });
+        alert(`You have successfully sold an NFT!`);
+        navigate(`/`);
+      });
+    } catch (e) {
+      console.log("Error while trying to sell NFT: " + e);
+    }
+  };
+
+  const giftNft = async () => {
+    if (!beneficiary) {
+      alert("Please enter a valid address");
+      return;
+    }
+    try {
+      await performActions(async (kit) => {
+        await nftContract.methods
+          .giftToken(id, beneficiary)
+          .send({ from: defaultAccount });
+      });
+    } catch (e) {
+      console.log("Error while trying to gift NFT: " + e);
+    }
+  };
+
   return (
     <div className="nft_details">
       <div className="nft_details-img">
-        <img src={nftData.image} alt="nft-details-image" />
+        <img src={nftDetails.itemImage} alt="nft-details-image" />
       </div>
       <div className="nft_details-details">
         <div className="details-title details-row">
           <div className="details-label">Name</div>{" "}
-          <div className="details-content">{nftData.name}</div>
+          <div className="details-content">{nftDetails.itemName}</div>
         </div>
         <div className="details-description details-row">
           <div className="details-label">Description</div>{" "}
-          <div className="details-content">{nftData.description}</div>
+          <div className="details-content">{nftDetails.itemDescription}</div>
         </div>
         <div className="details-price details-row">
           <div className="details-label">Price</div>{" "}
-          <div className="details-content">{nftData.price} CELO</div>
+          <div className="details-content">{nftDetails.itemPrice} CELO</div>
         </div>
         <div className="details-bottom">
-          {console.log("nftowner -> " + nftData?.owwner)}
-          {nftData.owner == defaultAccount ? (
-            <div className="details-gift_nft">
-              <input type="text" placeholder="to..." /> <span>Gift NFT</span>
-            </div>
+          {tokenOwner == defaultAccount ? (
+            <>
+              <div className="details-buy_btn" onClick={() => sellNft()}>
+                Sell NFT
+              </div>
+              <div className="details-gift_nft">
+                <input
+                  type="text"
+                  placeholder="to..."
+                  onChange={(e) => setBeneficiary(e.target.value)}
+                />{" "}
+                <span onClick={() => giftNft()}>Gift NFT</span>
+              </div>
+            </>
           ) : (
             <div className="details-buy_btn" onClick={purchaseNft}>
               Buy NFT
