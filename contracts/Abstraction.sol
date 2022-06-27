@@ -31,6 +31,7 @@ contract Abstraction is ERC721URIStorage {
     event MintNewTokenEvent(address indexed minter, uint256 tokenId);
     event BuyTokenEvent(address indexed buyer, uint256 tokenId);
     event GiftTokenEvent(address indexed from, address indexed to, uint256 tokenId);
+    event BuyTokenAsGiftEvent(address indexed from, address indexed to, uint256 tokenId);
 
     constructor() ERC721("Abstraction Collectible", "ABS") {
         owner = payable(msg.sender);
@@ -77,8 +78,7 @@ contract Abstraction is ERC721URIStorage {
                 allMyTokens[counter] = id;
                 counter++;
             }
-        }
-        
+        }        
         return allMyTokens;
     }
 
@@ -95,7 +95,6 @@ contract Abstraction is ERC721URIStorage {
                 counter++;
             }
         }
-
         return allItems;
     }
 
@@ -113,12 +112,27 @@ contract Abstraction is ERC721URIStorage {
         tokenSold.increment();    
         _seller.transfer(msg.value);
         emit BuyTokenEvent(msg.sender, _tokenId);
+    } 
+
+    // purchase token as gift
+    function purchaseTokenAsGift(uint256 _tokenId, address _beneficiary) public payable {
+        uint256 tokenPrice = tokenItems[_tokenId].tokenPrice;
+        require(tokenPrice <= msg.value, "insufficient funds!");
+        address payable _seller = payable(tokenItems[_tokenId].seller);
+
+        tokenItems[_tokenId].seller = payable(address(0));
+        tokenItems[_tokenId].owner = payable(_beneficiary);
+        tokenItems[_tokenId].sold = true;
+
+        _transfer(address(this), _beneficiary, _tokenId);        
+        tokenSold.increment();    
+        (bool sentSalesPriceToSeller, ) = _seller.call{value: msg.value}("");
+        require(sentSalesPriceToSeller, "failed to send celo to seller");        
+        emit BuyTokenAsGiftEvent(msg.sender, _beneficiary, _tokenId);
     }
 
     // sell token 
-    function sellToken(uint256 _tokenId, uint256 _newPrice) public {
-        require(ownerOf(_tokenId) == msg.sender, "You are not the owner!");
-        require(_newPrice > 0, "Price too low!");
+    function sellToken(uint256 _tokenId, uint256 _newPrice) public canSellToken(_tokenId, _newPrice){       
         tokenItems[_tokenId] = TokenItem(
             _tokenId,
             _newPrice, 
@@ -142,13 +156,21 @@ contract Abstraction is ERC721URIStorage {
     }
 
     // gift token to another user
-    function giftToken(uint256 _tokenId, address _beneficiary) public payable {
-        require(ownerOf(_tokenId) == msg.sender, "You are not the owner!"); 
-        require(_beneficiary != address(0));
-        require(msg.sender != address(0));
-
+    function giftToken(uint256 _tokenId, address _beneficiary) public payable canGiftToken(_tokenId, _beneficiary) {
         transferFrom(msg.sender, _beneficiary, _tokenId);
         emit GiftTokenEvent(msg.sender, _beneficiary, _tokenId);
+    }
+
+    modifier canSellToken(uint256 _tokenId, uint256 _newPrice) {
+        require(ownerOf(_tokenId) == msg.sender, "You are not the owner!");
+        require(_newPrice > 0, "Price too low!");
+        _;
+    }
+
+    modifier canGiftToken(uint256 _tokenId,  address _beneficiary) {
+        require(ownerOf(_tokenId) == msg.sender, "You are not the owner!"); 
+        require(_beneficiary != address(0));
+        _;
     }
 
 }
