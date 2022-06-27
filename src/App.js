@@ -1,7 +1,7 @@
 import "./App.css";
 import { Navbar, Footer } from "./components";
 import { Main, Profile, Item, Create } from "./pages";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
