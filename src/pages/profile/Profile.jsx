@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./profile.css";
 import Nfts from "../../components/nfts/Nfts";
-import { useContractKit } from "@celo-tools/use-contractkit";
 import { useNftContract } from "../../hooks/useNftContract";
 import axios from "axios";
 import { ethers } from "ethers";
@@ -18,6 +17,7 @@ const Profile = () => {
     }
   }, [nftContract]);
 
+  // get all user's NFTs from contract
   const getNfts = async () => {
     setLoading(true);
     try {

@@ -23,7 +23,7 @@ ReactDOM.render(
       }}
       dapp={{
         name: "Abstraction",
-        description: "A ollection of abstract images",
+        description: "A collection of abstract NFT images",
         url: "https://www.example.com",
       }}
     >

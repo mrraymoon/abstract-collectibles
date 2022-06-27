@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import image from "../../assets/image.jpg"
+import image from "../../assets/image.jpg";
 import { Link } from "react-router-dom";
 import { useContractKit } from "@celo-tools/use-contractkit";
-import { truncateAddress } from "../../utils/helpers";
+import { truncateAddress } from "../../utils/helperFunctions";
 
 import "./Navbar.css";
 
@@ -49,10 +49,13 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <button type="button" onClick={destroy} className="secondary-btn">
-              {truncateAddress(address)}
-            </button>
-
+            <a
+              href={`https://alfajores-blockscout.celo-testnet.org/address/${address}/transactions`}
+            >
+              <button type="button" className="secondary-btn">
+                {truncateAddress(address)}
+              </button>
+            </a>
             <Link to="/create">
               <button type="button" className="primary-btn">
                 Mint new NFT

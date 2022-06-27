@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div className="footer section__padding">
       <img src={image} alt="logo" />
-      <p>Collect your abstract NFTs</p>
+      <p>Collect your abstract NFTs now!</p>
     </div>
   );
 };

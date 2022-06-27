@@ -1,7 +1,7 @@
-require('@nomiclabs/hardhat-waffle');
-require('dotenv').config();
+require("@nomiclabs/hardhat-waffle");
+require("dotenv").config();
 
-task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
+task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
   for (const account of accounts) {
@@ -11,7 +11,7 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 
 const privateKey = process.env.PRIVATEKEY;
 if (!privateKey) {
-  throw new Error('Please set your privateKey in a .env file');
+  throw new Error("Please set your privateKey in a .env file");
 }
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
     },
   },
   solidity: {
-    version: '0.8.4',
+    version: "0.8.4",
     settings: {
       optimizer: {
         enabled: true,

@@ -13,14 +13,16 @@ const Main = () => {
   useEffect(() => {
     if (nftContract) loadNFTs();
   }, [nftContract]);
+
+  // load all market NFTs from contract
   const loadNFTs = async () => {
     try {
-      const data = await nftContract.methods.fetchAllTokenItems().call();      
+      const data = await nftContract.methods.fetchAllTokenItems().call();
       const items = await Promise.all(
         data.map(async (_token) => {
           const tokenUri = await nftContract.methods
             .tokenURI(_token.tokenId)
-            .call();            
+            .call();
           const meta = await axios.get(tokenUri);
           let tokenPrice = ethers.utils.formatUnits(
             _token.tokenPrice.toString(),

@@ -5,7 +5,6 @@ const Address = ({ address }) => {
   if (address) {
     return (
       <button type="button" className="secondary-btn">
-        {/* format user wallet address to a more suitable display */}
         {truncateAddress(address)}
       </button>
     );

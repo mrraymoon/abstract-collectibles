@@ -5,10 +5,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center;    
 }
 
-.footer img {
+.footer p {
+    font-family: cursive;
+}
+
+.footer img {    
     width: 30px;
     height: 30px;
     border-radius: 50%;

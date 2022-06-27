@@ -45,6 +45,7 @@ const Create = () => {
     }
   };
 
+  // upload image to IPFS
   const uploadToIPFS = async (event) => {
     event.preventDefault();
     const file = event.target.files[0];
@@ -59,6 +60,7 @@ const Create = () => {
     }
   };
 
+  // Mint and NFT then send to market
   const mintThenList = async (result, defaultAccount) => {
     const tokenUri = `https://ipfs.infura.io/ipfs/${result.path}`;
     const tokenPrice = ethers.utils.parseEther(itemPrice.toString());
@@ -69,6 +71,7 @@ const Create = () => {
     navigate(`/`);
   };
 
+  // Create a new NFT
   const createNewNft = async (e) => {
     e.preventDefault();
     try {
@@ -94,6 +97,7 @@ const Create = () => {
     }
   };
 
+  // Save image to file storage
   const handleSave = () => {
     const targetNode = document.querySelector(".paper");
     htmlToImage

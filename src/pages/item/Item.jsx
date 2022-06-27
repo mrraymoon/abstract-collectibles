@@ -30,6 +30,7 @@ const Item = () => {
     setTokenOwner(_tokenOwner);
   };
 
+  // purchase an NFT
   const purchaseNft = async () => {
     try {
       await performActions(async (kit) => {
@@ -49,6 +50,7 @@ const Item = () => {
     }
   };
 
+  // sell an NFT
   const sellNft = async () => {
     try {
       await performActions(async (kit) => {
@@ -66,6 +68,7 @@ const Item = () => {
     }
   };
 
+  // gift and NFT to another user
   const giftNft = async () => {
     if (!beneficiary) {
       alert("Please enter a valid address");

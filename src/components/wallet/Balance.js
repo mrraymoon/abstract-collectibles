@@ -1,14 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { formatBigNumber } from "../../utils/helpers";
+import { formatBigNumber } from "../../utils/helperFunctions";
 
 const Balance = ({ amount, symbol }) => {
   if (amount) {
     return (
       <div>
-        <span id="balance">
-          {/* convert big number from wei */}${formatBigNumber(amount)}
-        </span>
+        <span id="balance">${formatBigNumber(amount)}</span>
         <span className="">{symbol}</span>
       </div>
     );
