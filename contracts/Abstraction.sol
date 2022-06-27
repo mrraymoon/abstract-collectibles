@@ -31,6 +31,7 @@ contract Abstraction is ERC721URIStorage {
     event MintNewTokenEvent(address indexed minter, uint256 tokenId);
     event BuyTokenEvent(address indexed buyer, uint256 tokenId);
     event GiftTokenEvent(address indexed from, address indexed to, uint256 tokenId);
+    event BuyTokenAsGiftEvent(address indexed from, address indexed to, uint256 tokenId);
 
     constructor() ERC721("Abstraction Collectible", "ABS") {
         owner = payable(msg.sender);
@@ -126,8 +127,8 @@ contract Abstraction is ERC721URIStorage {
         _transfer(address(this), _beneficiary, _tokenId);        
         tokenSold.increment();    
         (bool sentSalesPriceToSeller, ) = _seller.call{value: msg.value}("");
-        require(sentSalesPriceToSeller, "failed to send celo to seller");
-        emit BuyTokenEvent(msg.sender, _tokenId);
+        require(sentSalesPriceToSeller, "failed to send celo to seller");        
+        emit BuyTokenAsGiftEvent(msg.sender, _beneficiary, _tokenId);
     }
 
     // sell token 
