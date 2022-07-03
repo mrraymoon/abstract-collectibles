@@ -167,6 +167,7 @@ contract Abstraction is ERC721URIStorage {
     {
         uint256 tokenPrice = tokenItems[_tokenId].tokenPrice;
         require(msg.value == tokenPrice, "insufficient funds!");
+        require(!tokenItems[_tokenId].sold, "Item isn't on sale");
         address payable _seller = payable(tokenItems[_tokenId].seller);
 
         tokenItems[_tokenId].seller = payable(address(0));
