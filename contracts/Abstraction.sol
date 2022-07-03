@@ -4,12 +4,14 @@ pragma solidity >=0.7.0;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract Abstraction is ERC721URIStorage {
+contract Abstraction is ERC721URIStorage, ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter public tokenId;
     Counters.Counter public tokenSold;
     address payable owner;
+     uint internal lengthofTokens = 0;
 
     mapping(uint256 => TokenItem) public tokenItems;
 
@@ -38,6 +40,7 @@ contract Abstraction is ERC721URIStorage {
 
     // mint a new token 
     function mint(string memory _tokenUri, uint256 _tokenPrice) public payable {
+        require(_tokenPrice > 0, "invalid token price");// require statement 
         uint256 newId = tokenId.current();
         tokenId.increment();
         _safeMint(msg.sender, newId);
@@ -51,6 +54,8 @@ contract Abstraction is ERC721URIStorage {
             payable(address(this)),
             false
         );
+
+        lengthofTokens++;
 
         // update frontend about new token minted
         emit CreateTokenItemEvent(
@@ -101,9 +106,11 @@ contract Abstraction is ERC721URIStorage {
 
     // purchase token
     function purchaseToken(uint256 _tokenId) public payable {
+     
         uint256 tokenPrice = tokenItems[_tokenId].tokenPrice;
         require(tokenPrice <= msg.value, "insufficient funds!");
         address payable _seller = payable(tokenItems[_tokenId].seller);
+        require(msg.sender != _seller, "you cannot buy your own token");
 
         tokenItems[_tokenId].seller = payable(address(0));
         tokenItems[_tokenId].owner = payable(msg.sender);
@@ -149,6 +156,17 @@ contract Abstraction is ERC721URIStorage {
 
         transferFrom(msg.sender, _beneficiary, _tokenId);
         emit GiftTokenEvent(msg.sender, _beneficiary, _tokenId);
+    }
+
+     function removeToken(uint _index) external {
+	         require(ownerOf(_tokenId) == msg.sender, "You are not the owner!");         
+            tokenItems[_index]= tokenItems[lengthofTokens - 1];
+            delete tokenItems[lengthofTokens - 1];
+            lengthofTokens--; 
+	 }
+
+      function getTokenslength() public view returns (uint256) {
+        return lengthofTokens;
     }
 
 }
