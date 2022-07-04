@@ -168,6 +168,10 @@ contract Abstraction is ERC721URIStorage {
         uint256 tokenPrice = tokenItems[_tokenId].tokenPrice;
         require(msg.value == tokenPrice, "insufficient funds!");
         require(!tokenItems[_tokenId].sold, "Item isn't on sale");
+        require(
+            msg.sender != tokenItems[_tokenId].seller,
+            "You can't buy your own token"
+        );
         address payable _seller = payable(tokenItems[_tokenId].seller);
 
         tokenItems[_tokenId].seller = payable(address(0));
@@ -250,9 +254,10 @@ contract Abstraction is ERC721URIStorage {
         isSuspended
     {
         TokenItem storage currentToken = tokenItems[_tokenId];
+        require(currentToken.sold, "Token is on sale");
         require(ownerOf(_tokenId) == msg.sender, "You are not the owner!");
         require(_beneficiary != address(0), "Invalid beneficiary");
-        require(currentToken.sold, "Token is on sale");
+
         require(msg.sender != address(0), "Invalid caller");
         checkHighestOwned(_tokenId, _beneficiary);
         transferFrom(msg.sender, _beneficiary, _tokenId);
