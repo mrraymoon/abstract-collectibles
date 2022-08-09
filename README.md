@@ -1,5 +1,5 @@
 # Abstract Collectibles
-A collection of abstract NFT images 
+An NFT app that mint's abstract and random images. The images is created by the user
 
 ## Live Demo
 Check the live demo [here](https://mrraymoon.github.io/abstract-collectibles)
