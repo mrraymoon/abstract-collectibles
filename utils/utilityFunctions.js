@@ -1,11 +1,11 @@
 const ERC20_DECIMALS = 18;
 export const DECIMALS = 10 ** 18;
 
-const ether = (wei) => wei / DECIMALS;
+const convertToEther = (wei) => wei / DECIMALS;
 
 export var truncate = function (address) {
   if (!address) return
-  return address.slice(0, 5) + "..." + address.slice(address.length - 4, address.length);
+  return address.slice(0, 6) + "..." + address.slice(address.length - 4, address.length);
 };
 
 // convert from big number
@@ -17,7 +17,7 @@ export const formatBigNumber = (num) => {
 export const formatPrice = (price) => {
   const precision = 100; // Use 2 decimal places
 
-  price = ether(price);
+  price = convertToEther(price);
   price = Math.round(price * precision) / precision;
 
   return price;
