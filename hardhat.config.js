@@ -1,14 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
 
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners();
-
-  for (const account of accounts) {
-    console.log(account.address);
-  }
-});
-
 const privateKey = process.env.PRIVATEKEY;
 if (!privateKey) {
   throw new Error("Please set your privateKey in a .env file");
