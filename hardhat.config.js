@@ -1,8 +1,8 @@
 require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
 
-const privateKey = process.env.PRIVATEKEY;
-if (!privateKey) {
+const PRIVATE_KEY = process.env.PRIVATEKEY;
+if (!PRIVATE_KEY) {
   throw new Error("Please set your privateKey in a .env file");
 }
 
@@ -13,7 +13,7 @@ module.exports = {
     },
     alfajores: {
       url: "https://alfajores-forno.celo-testnet.org",
-      accounts: [privateKey],
+      accounts: [PRIVATE_KEY],
       chainId: 44787,
     },
   },
