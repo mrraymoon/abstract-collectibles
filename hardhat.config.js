@@ -7,16 +7,6 @@ if (!PRIVATE_KEY) {
 }
 
 module.exports = {
-  networks: {
-    hardhat: {
-      chainId: 1337,
-    },
-    alfajores: {
-      url: "https://alfajores-forno.celo-testnet.org",
-      accounts: [PRIVATE_KEY],
-      chainId: 44787,
-    },
-  },
   solidity: {
     version: "0.8.4",
     settings: {
@@ -26,4 +16,14 @@ module.exports = {
       },
     },
   },
+  networks: {
+    hardhat: {
+      chainId: 1337,
+    },
+    alfajores: {
+      url: "https://alfajores-forno.celo-testnet.org",
+      accounts: [PRIVATE_KEY],
+      chainId: 44787,
+    },
+  }
 };
