@@ -3,17 +3,11 @@ const { ethers } = require("hardhat");
 
 describe("Abstraction", function () {
   it("Should Mint the right quantity of NFT", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+    const Abstraction = await ethers.getContractFactory("Greeter");
+    const abstraction = await Abstraction.deploy("Hello, world!");
+    await abstraction.deployed();
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    expect(await abstraction.mint()).to.equal("1");
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
   });
 });
