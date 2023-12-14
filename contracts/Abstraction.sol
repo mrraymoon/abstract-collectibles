@@ -5,6 +5,7 @@ pragma solidity >=0.7.0;
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
+/// notice A contract that allows users to create NFTs from canvas and trade on the platform
 contract Abstraction is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter public tokenId;
@@ -36,7 +37,9 @@ contract Abstraction is ERC721URIStorage {
         owner = payable(msg.sender);
     }
 
-    // mint a new token 
+    /// @notice Mint a new token and add to contract
+    /// @param _tokenUri URI of token 
+    /// @param _tokenPrice Price to trade token
     function mint(string memory _tokenUri, uint256 _tokenPrice) public payable {
         uint256 newId = tokenId.current();
         tokenId.increment();
@@ -66,7 +69,8 @@ contract Abstraction is ERC721URIStorage {
         emit MintNewTokenEvent(msg.sender, newId);
     }
 
-    // fetch all user's token
+    /// @notice Get all token that belongs to user from contract
+    /// @return An array of IDs representing user's token indexes
     function fetchMyTokens() public view returns (uint256[] memory) {
         uint256 counter;
         uint256 itemsLength = tokenId.current();
